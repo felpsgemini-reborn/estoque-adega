@@ -7,29 +7,57 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-100 p-4 md:p-8 font-sans">
+<body class="bg-slate-100 font-sans">
 
-    <div class="max-w-6xl mx-auto space-y-6">
+    <!-- ================= TELA DE LOGIN ================= -->
+    <div id="telaLogin" class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-slate-800">🍷 Adega ERP</h1>
+                <p class="text-slate-500 mt-2">Faça login para gerenciar o estoque</p>
+            </div>
+            
+            <form id="formLogin" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Nome de Usuário</label>
+                    <!-- Mudamos o tipo de 'email' para 'text' e o id -->
+                    <input type="text" id="usuarioLogin" required class="w-full border border-slate-300 p-3 rounded focus:outline-none focus:border-blue-500" placeholder="Ex: admin">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Senha</label>
+                    <input type="password" id="senhaLogin" required class="w-full border border-slate-300 p-3 rounded focus:outline-none focus:border-blue-500" placeholder="••••••••">
+                </div>
+                <button type="submit" id="btnEntrar" class="w-full bg-blue-600 text-white font-bold p-3 rounded hover:bg-blue-700 transition">Entrar no Sistema</button>
+            </form>
+            <p id="msgErroLogin" class="mt-4 text-center text-red-600 text-sm hidden font-semibold"></p>
+        </div>
+    </div>
+
+
+    <!-- ================= TELA DO APLICATIVO ================= -->
+    <div id="telaApp" class="max-w-6xl mx-auto space-y-6 p-4 md:p-8 hidden">
         
-        <!-- Bloco Principal: Estoque e Finanças -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-slate-800">🍷 Controle de Estoque e Finanças</h1>
-                <span class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded">Status: Online</span>
+                <div class="flex items-center space-x-3">
+                    <span class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded hidden md:block">Status: Autenticado</span>
+                    <button id="btnSair" class="bg-slate-200 text-slate-700 hover:bg-red-500 hover:text-white px-3 py-1 rounded font-semibold transition text-sm">Sair</button>
+                </div>
             </div>
 
             <!-- Dashboard Financeiro -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div class="bg-white p-4 rounded-md border border-slate-200 shadow-sm flex items-center justify-between border-l-4 border-blue-500">
                     <div>
-                        <p class="text-sm text-slate-500 font-semibold uppercase">Capital Investido (Custo)</p>
+                        <p class="text-sm text-slate-500 font-semibold uppercase">Capital Investido</p>
                         <p class="text-2xl font-bold text-slate-800" id="totalCusto">R$ 0,00</p>
                     </div>
                     <div class="text-blue-500 text-4xl">📦</div>
                 </div>
                 <div class="bg-white p-4 rounded-md border border-slate-200 shadow-sm flex items-center justify-between border-l-4 border-green-500">
                     <div>
-                        <p class="text-sm text-slate-500 font-semibold uppercase">Expectativa de Venda Bruta</p>
+                        <p class="text-sm text-slate-500 font-semibold uppercase">Expectativa de Venda</p>
                         <p class="text-2xl font-bold text-slate-800" id="totalVenda">R$ 0,00</p>
                     </div>
                     <div class="text-green-500 text-4xl">💰</div>
@@ -39,12 +67,8 @@
             <!-- Formulário de Cadastro -->
             <div class="bg-slate-50 p-5 rounded-md border border-slate-200 mb-6 shadow-sm">
                 <h2 class="text-lg font-semibold text-slate-700 mb-4">Cadastrar Nova Bebida</h2>
-                
                 <form id="formProduto" class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-3">
-                    <div class="md:col-span-2 lg:col-span-2">
-                        <input type="text" id="nome" placeholder="Nome (ex: Casillero)" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
-                    </div>
-                    
+                    <div class="md:col-span-2 lg:col-span-2"><input type="text" id="nome" placeholder="Nome (ex: Casillero)" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500"></div>
                     <div class="md:col-span-2 lg:col-span-1">
                         <select id="categoria" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
                             <option value="Vinho">Vinho</option>
@@ -56,26 +80,11 @@
                             <option value="Outros">Outros</option>
                         </select>
                     </div>
-
-                    <div class="md:col-span-1 lg:col-span-1">
-                        <input type="text" id="volume" placeholder="Vol (ex: 750ml)" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
-                    </div>
-                    
-                    <div class="md:col-span-1 lg:col-span-1">
-                        <input type="number" id="quantidade" placeholder="Qtd" required min="0" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
-                    </div>
-
-                    <div class="md:col-span-1 lg:col-span-1">
-                        <input type="number" step="0.01" id="precoCusto" placeholder="Custo (R$)" required min="0" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
-                    </div>
-
-                    <div class="md:col-span-1 lg:col-span-1">
-                        <input type="number" step="0.01" id="precoVenda" placeholder="Venda (R$)" required min="0" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
-                    </div>
-                    
-                    <div class="md:col-span-4 lg:col-span-1">
-                        <button type="submit" class="w-full bg-blue-600 text-white font-semibold p-2 rounded hover:bg-blue-700 transition">Salvar</button>
-                    </div>
+                    <div class="md:col-span-1 lg:col-span-1"><input type="text" id="volume" placeholder="Vol (ex: 750ml)" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500"></div>
+                    <div class="md:col-span-1 lg:col-span-1"><input type="number" id="quantidade" placeholder="Qtd" required min="0" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500"></div>
+                    <div class="md:col-span-1 lg:col-span-1"><input type="number" step="0.01" id="precoCusto" placeholder="Custo (R$)" required min="0" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500"></div>
+                    <div class="md:col-span-1 lg:col-span-1"><input type="number" step="0.01" id="precoVenda" placeholder="Venda (R$)" required min="0" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500"></div>
+                    <div class="md:col-span-4 lg:col-span-1"><button type="submit" class="w-full bg-blue-600 text-white font-semibold p-2 rounded hover:bg-blue-700 transition">Salvar</button></div>
                 </form>
             </div>
 
@@ -89,26 +98,24 @@
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-800 text-white">
-                            <th class="p-3 rounded-tl-md">Nome da Bebida</th>
+                            <th class="p-3 rounded-tl-md">Bebida</th>
                             <th class="p-3">Categoria</th>
                             <th class="p-3">Vol</th>
-                            <th class="p-3 text-center">Custo un.</th>
-                            <th class="p-3 text-center">Venda un.</th>
-                            <th class="p-3 text-center">Lucro un.</th>
+                            <th class="p-3 text-center">Custo</th>
+                            <th class="p-3 text-center">Venda</th>
+                            <th class="p-3 text-center">Lucro</th>
                             <th class="p-3 text-center">Qtd</th>
-                            <th class="p-3 text-center rounded-tr-md">Ações rápidas</th>
+                            <th class="p-3 text-center rounded-tr-md">Ações</th>
                         </tr>
                     </thead>
-                    <tbody id="tabelaEstoque" class="text-slate-700">
-                        <!-- Os itens serão injetados aqui -->
-                    </tbody>
+                    <tbody id="tabelaEstoque" class="text-slate-700"></tbody>
                 </table>
             </div>
         </div>
 
         <!-- Bloco Histórico de Vendas -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">📜 Últimas Vendas (Histórico)</h2>
+            <h2 class="text-xl font-bold text-slate-800 mb-4">📜 Últimas Vendas</h2>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
@@ -119,49 +126,92 @@
                             <th class="p-3 text-center">Lucro Registrado</th>
                         </tr>
                     </thead>
-                    <tbody id="tabelaHistorico" class="text-slate-600">
-                        <!-- Histórico injetado aqui -->
-                    </tbody>
+                    <tbody id="tabelaHistorico" class="text-slate-600"></tbody>
                 </table>
             </div>
         </div>
 
     </div>
 
+    <!-- ================= SCRIPTS ================= -->
     <script>
         const supabaseUrl = 'https://nkbvqzkshyoxerdfdwlg.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYnZxemtzaHlveGVyZGZkd2xnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzEzMTksImV4cCI6MjA5ODgwNzMxOX0.EEX1lNaHxV2P7On2VrY68hpR2fyxRgjtr7mMKnpYPO0';
         const db = supabase.createClient(supabaseUrl, supabaseKey);
 
-        const form = document.getElementById('formProduto');
+        const telaLogin = document.getElementById('telaLogin');
+        const telaApp = document.getElementById('telaApp');
+        const formLogin = document.getElementById('formLogin');
+        const msgErroLogin = document.getElementById('msgErroLogin');
+        const btnSair = document.getElementById('btnSair');
+
+        async function checarSessao() {
+            const { data: { session } } = await db.auth.getSession();
+            if (session) {
+                mostrarAplicativo();
+            }
+        }
+
+        formLogin.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btnEntrar = document.getElementById('btnEntrar');
+            btnEntrar.innerText = "Verificando...";
+            msgErroLogin.classList.add('hidden');
+
+            const usuarioDigitado = document.getElementById('usuarioLogin').value.trim();
+            const senha = document.getElementById('senhaLogin').value;
+
+            // Aqui acontece a mágica: transformamos o usuário em e-mail para o Supabase aceitar
+            const emailFicticio = usuarioDigitado.toLowerCase() + "@adega.com";
+
+            const { data, error } = await db.auth.signInWithPassword({
+                email: emailFicticio,
+                password: senha,
+            });
+
+            if (error) {
+                msgErroLogin.innerText = "Usuário ou senha incorretos.";
+                msgErroLogin.classList.remove('hidden');
+                btnEntrar.innerText = "Entrar no Sistema";
+            } else {
+                mostrarAplicativo();
+            }
+        });
+
+        btnSair.addEventListener('click', async () => {
+            await db.auth.signOut();
+            telaApp.classList.add('hidden');
+            telaLogin.classList.remove('hidden');
+            document.getElementById('senhaLogin').value = ''; 
+        });
+
+        function mostrarAplicativo() {
+            telaLogin.classList.add('hidden');
+            telaApp.classList.remove('hidden');
+            carregarEstoque();
+            carregarHistorico();
+        }
+
+        checarSessao();
+
+        // ==== LÓGICA DO ESTOQUE E HISTÓRICO ==== //
+
+        const formProduto = document.getElementById('formProduto');
         const tabela = document.getElementById('tabelaEstoque');
         const tabelaHistorico = document.getElementById('tabelaHistorico');
         const campoPesquisa = document.getElementById('campoPesquisa');
         
         let estoqueGlobal = [];
 
-        const formatarMoeda = (valor) => {
-            return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        };
-
-        const formatarData = (dataIso) => {
-            const data = new Date(dataIso);
-            return data.toLocaleString('pt-BR');
-        };
+        const formatarMoeda = (valor) => Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        const formatarData = (dataIso) => new Date(dataIso).toLocaleString('pt-BR');
 
         function atualizarDashboard(dados) {
-            let totalCusto = 0;
-            let totalVenda = 0;
-
+            let totalCusto = 0; let totalVenda = 0;
             dados.forEach(produto => {
-                const custo = parseFloat(produto.preco_custo) || 0;
-                const venda = parseFloat(produto.preco_venda) || 0;
-                const qtd = parseInt(produto.quantidade) || 0;
-
-                totalCusto += (custo * qtd);
-                totalVenda += (venda * qtd);
+                totalCusto += (parseFloat(produto.preco_custo) || 0) * (parseInt(produto.quantidade) || 0);
+                totalVenda += (parseFloat(produto.preco_venda) || 0) * (parseInt(produto.quantidade) || 0);
             });
-
             document.getElementById('totalCusto').innerText = formatarMoeda(totalCusto);
             document.getElementById('totalVenda').innerText = formatarMoeda(totalVenda);
         }
@@ -169,26 +219,18 @@
         function renderizarTabela(dados) {
             tabela.innerHTML = ''; 
             atualizarDashboard(dados);
-
-            if (dados.length === 0) {
-                tabela.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-slate-500">Nenhuma bebida encontrada.</td></tr>';
-                return;
-            }
+            if (dados.length === 0) { tabela.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-slate-500">Nenhuma bebida.</td></tr>'; return; }
 
             dados.forEach((produto) => {
                 const custo = parseFloat(produto.preco_custo) || 0;
                 const venda = parseFloat(produto.preco_venda) || 0;
                 const lucro = venda - custo;
-
                 const corLucro = lucro >= 0 ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
                 const alertaEstoque = produto.quantidade < 5 ? 'text-red-600 font-bold' : 'text-slate-800 font-bold';
-
-                // Usando aspas simples no escape para o nome do produto não quebrar a função no HTML
                 const nomeEscapado = produto.nome.replace(/'/g, "\\'");
 
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-slate-200 hover:bg-slate-50";
-                
                 tr.innerHTML = `
                     <td class="p-3 font-medium">${produto.nome}</td>
                     <td class="p-3"><span class="bg-slate-200 px-2 py-1 rounded text-xs font-semibold">${produto.categoria}</span></td>
@@ -198,14 +240,11 @@
                     <td class="p-3 text-center ${corLucro}">${formatarMoeda(lucro)}</td>
                     <td class="p-3 text-center ${alertaEstoque} text-lg">${produto.quantidade}</td>
                     <td class="p-3 text-center space-x-1">
-                        <!-- Botão de Vender -->
-                        <button onclick="registrarVenda(${produto.id}, '${nomeEscapado}', ${venda}, ${lucro}, ${produto.quantidade})" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm font-bold shadow" title="Vender 1 unidade">🛒</button>
-                        
-                        <!-- Botões de Ajuste e Edição -->
-                        <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade}, 1)" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 text-sm font-bold shadow" title="Adicionar">+</button>
-                        <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade}, -1)" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-sm font-bold shadow" title="Remover">-</button>
-                        <button onclick="editarPrecos(${produto.id}, ${custo}, ${venda})" class="bg-slate-600 text-white px-2 py-1 rounded hover:bg-slate-700 text-sm font-bold shadow" title="Editar Preços">✏️</button>
-                        <button onclick="deletarProduto(${produto.id})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-sm font-bold shadow" title="Excluir">🗑️</button>
+                        <button onclick="registrarVenda(${produto.id}, '${nomeEscapado}', ${venda}, ${lucro}, ${produto.quantidade})" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm font-bold shadow" title="Vender">🛒</button>
+                        <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade}, 1)" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 text-sm font-bold shadow">+</button>
+                        <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade}, -1)" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-sm font-bold shadow">-</button>
+                        <button onclick="editarPrecos(${produto.id}, ${custo}, ${venda})" class="bg-slate-600 text-white px-2 py-1 rounded hover:bg-slate-700 text-sm font-bold shadow">✏️</button>
+                        <button onclick="deletarProduto(${produto.id})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-sm font-bold shadow">🗑️</button>
                     </td>
                 `;
                 tabela.appendChild(tr);
@@ -214,146 +253,65 @@
 
         function aplicarFiltro() {
             const termo = campoPesquisa.value.toLowerCase();
-            const estoqueFiltrado = estoqueGlobal.filter(produto => 
-                produto.nome.toLowerCase().includes(termo)
-            );
-            renderizarTabela(estoqueFiltrado);
+            renderizarTabela(estoqueGlobal.filter(produto => produto.nome.toLowerCase().includes(termo)));
         }
 
         campoPesquisa.addEventListener('input', aplicarFiltro);
 
-        // --- FUNÇÕES DO BANCO DE DADOS ---
-
         async function carregarEstoque() {
-            tabela.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-blue-500 font-semibold">Sincronizando estoque...</td></tr>';
             const { data: estoque, error } = await db.from('estoque').select('*').order('id', { ascending: true });
-            if (error) return;
-            estoqueGlobal = estoque; 
-            aplicarFiltro(); 
+            if (!error) { estoqueGlobal = estoque; aplicarFiltro(); }
         }
 
         async function carregarHistorico() {
-            tabelaHistorico.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">Carregando histórico...</td></tr>';
-            
-            // Busca as últimas 10 vendas
-            const { data: vendas, error } = await db
-                .from('historico_vendas')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(10);
-
-            if (error || !vendas) {
-                tabelaHistorico.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-red-500">Erro ao carregar histórico. Criou a tabela historico_vendas?</td></tr>';
-                return;
-            }
-
+            const { data: vendas, error } = await db.from('historico_vendas').select('*').order('created_at', { ascending: false }).limit(10);
             tabelaHistorico.innerHTML = '';
-
-            if (vendas.length === 0) {
-                tabelaHistorico.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">Nenhuma venda registrada ainda.</td></tr>';
-                return;
+            if (error || !vendas || vendas.length === 0) {
+                tabelaHistorico.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">Nenhuma venda.</td></tr>'; return;
             }
-
             vendas.forEach(venda => {
                 const corLucro = venda.lucro_obtido >= 0 ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold';
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-slate-100 hover:bg-slate-50";
-                tr.innerHTML = `
-                    <td class="p-3 text-sm">${formatarData(venda.created_at)}</td>
-                    <td class="p-3 font-medium text-slate-800">${venda.nome_bebida}</td>
-                    <td class="p-3 text-center text-blue-700 font-semibold">${formatarMoeda(venda.valor_venda)}</td>
-                    <td class="p-3 text-center ${corLucro}">${formatarMoeda(venda.lucro_obtido)}</td>
-                `;
+                tr.innerHTML = `<td class="p-3 text-sm">${formatarData(venda.created_at)}</td><td class="p-3 font-medium text-slate-800">${venda.nome_bebida}</td><td class="p-3 text-center text-blue-700 font-semibold">${formatarMoeda(venda.valor_venda)}</td><td class="p-3 text-center ${corLucro}">${formatarMoeda(venda.lucro_obtido)}</td>`;
                 tabelaHistorico.appendChild(tr);
             });
         }
 
-        form.addEventListener('submit', async function(e) {
+        formProduto.addEventListener('submit', async function(e) {
             e.preventDefault();
-            const btnSubmit = form.querySelector('button[type="submit"]');
-            btnSubmit.innerText = "Enviando...";
-            btnSubmit.disabled = true;
-
+            const btnSubmit = formProduto.querySelector('button[type="submit"]');
+            btnSubmit.innerText = "Enviando..."; btnSubmit.disabled = true;
             const novoProduto = {
-                nome: document.getElementById('nome').value,
-                categoria: document.getElementById('categoria').value,
-                volume: document.getElementById('volume').value,
-                quantidade: parseInt(document.getElementById('quantidade').value),
-                preco_custo: parseFloat(document.getElementById('precoCusto').value),
-                preco_venda: parseFloat(document.getElementById('precoVenda').value)
+                nome: document.getElementById('nome').value, categoria: document.getElementById('categoria').value,
+                volume: document.getElementById('volume').value, quantidade: parseInt(document.getElementById('quantidade').value),
+                preco_custo: parseFloat(document.getElementById('precoCusto').value), preco_venda: parseFloat(document.getElementById('precoVenda').value)
             };
-
             await db.from('estoque').insert([novoProduto]);
-            form.reset();
-            await carregarEstoque();
-
-            btnSubmit.innerText = "Salvar";
-            btnSubmit.disabled = false;
+            formProduto.reset(); await carregarEstoque();
+            btnSubmit.innerText = "Salvar"; btnSubmit.disabled = false;
         });
 
-        // Registrar uma Venda (Diminui o estoque e salva no histórico)
         async function registrarVenda(id, nomeBebida, valorVenda, lucroObtido, quantidadeAtual) {
-            if (quantidadeAtual <= 0) {
-                alert("Estoque zerado! Não é possível vender.");
-                return;
-            }
-
-            // 1. Atualiza o estoque (-1)
+            if (quantidadeAtual <= 0) { alert("Estoque zerado!"); return; }
             await db.from('estoque').update({ quantidade: quantidadeAtual - 1 }).eq('id', id);
-
-            // 2. Insere no histórico
-            const novaVenda = {
-                nome_bebida: nomeBebida,
-                valor_venda: valorVenda,
-                lucro_obtido: lucroObtido
-            };
-            await db.from('historico_vendas').insert([novaVenda]);
-
-            // 3. Atualiza as duas tabelas na tela
-            carregarEstoque();
-            carregarHistorico();
+            await db.from('historico_vendas').insert([{ nome_bebida: nomeBebida, valor_venda: valorVenda, lucro_obtido: lucroObtido }]);
+            carregarEstoque(); carregarHistorico();
         }
 
-        // Alterar apenas a quantidade (+ ou - normal, para quebras ou reposição manual)
         async function alterarQuantidade(id, quantidadeAtual, valor) {
-            const novaQuantidade = quantidadeAtual + valor;
-            if (novaQuantidade >= 0) {
-                await db.from('estoque').update({ quantidade: novaQuantidade }).eq('id', id);
-                carregarEstoque(); 
-            }
+            if (quantidadeAtual + valor >= 0) { await db.from('estoque').update({ quantidade: quantidadeAtual + valor }).eq('id', id); carregarEstoque(); }
         }
 
-        // Editar Preço de Custo e Venda
         async function editarPrecos(id, custoAtual, vendaAtual) {
-            let novoCustoStr = prompt("Digite o NOVO preço de CUSTO (ex: 15.50):", custoAtual);
-            if (novoCustoStr === null) return; 
-
-            let novaVendaStr = prompt("Digite o NOVO preço de VENDA (ex: 25.00):", vendaAtual);
-            if (novaVendaStr === null) return; 
-
-            // Troca vírgula por ponto para o banco aceitar
-            let novoCusto = parseFloat(novoCustoStr.replace(',', '.'));
-            let novaVenda = parseFloat(novaVendaStr.replace(',', '.'));
-
-            if (isNaN(novoCusto) || isNaN(novaVenda)) {
-                alert("Valores inválidos. Use apenas números.");
-                return;
-            }
-
-            await db.from('estoque').update({ preco_custo: novoCusto, preco_venda: novaVenda }).eq('id', id);
-            carregarEstoque();
+            let novoCusto = parseFloat((prompt("NOVO preço de CUSTO:", custoAtual) || "").replace(',', '.'));
+            let novaVenda = parseFloat((prompt("NOVO preço de VENDA:", vendaAtual) || "").replace(',', '.'));
+            if (!isNaN(novoCusto) && !isNaN(novaVenda)) { await db.from('estoque').update({ preco_custo: novoCusto, preco_venda: novaVenda }).eq('id', id); carregarEstoque(); }
         }
 
         async function deletarProduto(id) {
-            if (confirm("Tem certeza que deseja remover esta bebida do sistema?")) {
-                await db.from('estoque').delete().eq('id', id);
-                carregarEstoque(); 
-            }
+            if (confirm("Tem certeza que deseja remover?")) { await db.from('estoque').delete().eq('id', id); carregarEstoque(); }
         }
-
-        // Inicializa as duas tabelas ao carregar
-        carregarEstoque();
-        carregarHistorico();
     </script>
 </body>
 </html>
