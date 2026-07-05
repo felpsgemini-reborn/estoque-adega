@@ -3,108 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estoque Adega - Nuvem</title>
-    <!-- Tailwind CSS para o visual -->
+    <title>Estoque Adega - Nuvem & Financeiro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Biblioteca oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-100 p-4 md:p-8 font-sans">
 
-    <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-slate-800">🍷 Controle de Estoque - Adega</h1>
-            <!-- Atualizei o status para indicar que agora roda na nuvem -->
-            <span class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded">Status: Online (Nuvem)</span>
+            <h1 class="text-2xl font-bold text-slate-800">🍷 Controle de Estoque e Finanças</h1>
+            <span class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded">Status: Online</span>
         </div>
         
         <!-- Formulário de Cadastro -->
-        <div class="bg-slate-50 p-4 rounded-md border border-slate-200 mb-8">
+        <div class="bg-slate-50 p-5 rounded-md border border-slate-200 mb-6 shadow-sm">
             <h2 class="text-lg font-semibold text-slate-700 mb-4">Cadastrar Nova Bebida</h2>
-            <form id="formProduto" class="grid grid-cols-1 md:grid-cols-6 gap-3">
-                <input type="text" id="nome" placeholder="Nome (ex: Vinho Casillero)" required class="border border-slate-300 p-2 rounded md:col-span-2 focus:outline-none focus:border-blue-500">
+            
+            <!-- Reorganizado para acomodar os novos campos de preço -->
+            <form id="formProduto" class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-3">
                 
-                <select id="categoria" class="border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
-                    <option value="Vinho">Vinho</option>
-                    <option value="Cerveja">Cerveja</option>
-                    <option value="Vodka">Vodka</option>
-                    <option value="Licor">Licor</option>
-                    <option value="Whisky">Whisky</option>
-                    <option value="Energético">Energético</option>
-                    <option value="Outros">Outros</option>
-                </select>
+                <div class="md:col-span-2 lg:col-span-2">
+                    <input type="text" id="nome" placeholder="Nome (ex: Casillero)" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                </div>
+                
+                <div class="md:col-span-2 lg:col-span-1">
+                    <select id="categoria" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                        <option value="Vinho">Vinho</option>
+                        <option value="Cerveja">Cerveja</option>
+                        <option value="Vodka">Vodka</option>
+                        <option value="Licor">Licor</option>
+                        <option value="Whisky">Whisky</option>
+                        <option value="Energético">Energético</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
 
-                <input type="text" id="volume" placeholder="Vol (ex: 750ml)" required class="border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                <div class="md:col-span-1 lg:col-span-1">
+                    <input type="text" id="volume" placeholder="Vol (ex: 750ml)" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                </div>
                 
-                <input type="number" id="quantidade" placeholder="Qtd Inicial" required min="0" class="border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                <div class="md:col-span-1 lg:col-span-1">
+                    <input type="number" id="quantidade" placeholder="Qtd" required min="0" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                </div>
+
+                <!-- Novos campos de preço com step="0.01" para aceitar centavos -->
+                <div class="md:col-span-1 lg:col-span-1">
+                    <input type="number" step="0.01" id="precoCusto" placeholder="Custo (R$)" required min="0" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div class="md:col-span-1 lg:col-span-1">
+                    <input type="number" step="0.01" id="precoVenda" placeholder="Venda (R$)" required min="0" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                </div>
                 
-                <button type="submit" class="bg-blue-600 text-white font-semibold p-2 rounded hover:bg-blue-700 transition">Adicionar</button>
+                <div class="md:col-span-4 lg:col-span-1">
+                    <button type="submit" class="w-full bg-blue-600 text-white font-semibold p-2 rounded hover:bg-blue-700 transition">Salvar</button>
+                </div>
             </form>
         </div>
 
+        <!-- Barra de Pesquisa -->
+        <div class="mb-4">
+            <input type="text" id="campoPesquisa" placeholder="🔍 Buscar bebida por nome..." class="w-full border border-slate-300 p-3 rounded-md focus:outline-none focus:border-blue-500 shadow-sm text-slate-700">
+        </div>
+
         <!-- Tabela de Estoque -->
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+        <div class="overflow-x-auto pb-4">
+            <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
                     <tr class="bg-slate-800 text-white">
                         <th class="p-3 rounded-tl-md">Nome da Bebida</th>
                         <th class="p-3">Categoria</th>
-                        <th class="p-3">Volume</th>
-                        <th class="p-3 text-center">Quantidade</th>
+                        <th class="p-3">Vol</th>
+                        <th class="p-3 text-center">Custo un.</th>
+                        <th class="p-3 text-center">Venda un.</th>
+                        <th class="p-3 text-center">Lucro un.</th>
+                        <th class="p-3 text-center">Qtd</th>
                         <th class="p-3 text-center rounded-tr-md">Ações</th>
                     </tr>
                 </thead>
                 <tbody id="tabelaEstoque" class="text-slate-700">
-                    <!-- Os itens serão injetados aqui pelo JavaScript -->
+                    <!-- Os itens serão injetados aqui -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Lógica do Sistema na Nuvem -->
     <script>
-        // 1. Configuração do Supabase (Chaves Inseridas)
         const supabaseUrl = 'https://nkbvqzkshyoxerdfdwlg.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYnZxemtzaHlveGVyZGZkd2xnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzEzMTksImV4cCI6MjA5ODgwNzMxOX0.EEX1lNaHxV2P7On2VrY68hpR2fyxRgjtr7mMKnpYPO0';
-        
-        // Criando o cliente para conversar com o banco
         const db = supabase.createClient(supabaseUrl, supabaseKey);
 
         const form = document.getElementById('formProduto');
         const tabela = document.getElementById('tabelaEstoque');
+        const campoPesquisa = document.getElementById('campoPesquisa');
+        
+        let estoqueGlobal = [];
 
-        // 2. Buscar os dados da nuvem
-        async function carregarEstoque() {
-            tabela.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-blue-500 font-semibold">Sincronizando com a nuvem...</td></tr>';
-            
-            const { data: estoque, error } = await db
-                .from('estoque')
-                .select('*')
-                .order('id', { ascending: true });
+        // Função utilitária para formatar números como R$ 0,00
+        const formatarMoeda = (valor) => {
+            return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        };
 
-            if (error) {
-                console.error("Erro do Supabase:", error);
-                tabela.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-red-500">Erro de conexão. A tabela "estoque" foi criada no painel do Supabase?</td></tr>';
-                return;
-            }
-
+        function renderizarTabela(dados) {
             tabela.innerHTML = ''; 
 
-            if (estoque.length === 0) {
-                tabela.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">Nenhuma bebida cadastrada. Adicione o primeiro item!</td></tr>';
+            if (dados.length === 0) {
+                tabela.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-slate-500">Nenhuma bebida encontrada.</td></tr>';
                 return;
             }
 
-            estoque.forEach((produto) => {
-                const alertaEstoqueBaixo = produto.quantidade < 5 ? 'text-red-600 font-bold' : 'text-slate-800 font-medium';
+            dados.forEach((produto) => {
+                // Se as bebidas antigas não tiverem preço no banco, consideramos 0 para não dar erro
+                const custo = parseFloat(produto.preco_custo) || 0;
+                const venda = parseFloat(produto.preco_venda) || 0;
+                const lucro = venda - custo;
+
+                // Define a cor do lucro (verde se for positivo, vermelho se estiver tomando prejuízo)
+                const corLucro = lucro >= 0 ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
+                const alertaEstoque = produto.quantidade < 5 ? 'text-red-600 font-bold' : 'text-slate-800 font-bold';
+
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-slate-200 hover:bg-slate-50";
                 
                 tr.innerHTML = `
-                    <td class="p-3">${produto.nome}</td>
+                    <td class="p-3 font-medium">${produto.nome}</td>
                     <td class="p-3"><span class="bg-slate-200 px-2 py-1 rounded text-xs font-semibold">${produto.categoria}</span></td>
                     <td class="p-3 text-slate-500">${produto.volume}</td>
-                    <td class="p-3 text-center ${alertaEstoqueBaixo}">${produto.quantidade} un.</td>
+                    <td class="p-3 text-center text-slate-600">${formatarMoeda(custo)}</td>
+                    <td class="p-3 text-center text-blue-700 font-semibold">${formatarMoeda(venda)}</td>
+                    <td class="p-3 text-center ${corLucro}">${formatarMoeda(lucro)}</td>
+                    <td class="p-3 text-center ${alertaEstoque} text-lg">${produto.quantidade}</td>
                     <td class="p-3 text-center">
                         <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade}, 1)" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm font-bold mr-1">+</button>
                         <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade}, -1)" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm font-bold mr-1">-</button>
@@ -115,7 +143,34 @@
             });
         }
 
-        // 3. Salvar novo produto na nuvem
+        function aplicarFiltro() {
+            const termo = campoPesquisa.value.toLowerCase();
+            const estoqueFiltrado = estoqueGlobal.filter(produto => 
+                produto.nome.toLowerCase().includes(termo)
+            );
+            renderizarTabela(estoqueFiltrado);
+        }
+
+        campoPesquisa.addEventListener('input', aplicarFiltro);
+
+        async function carregarEstoque() {
+            tabela.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-blue-500 font-semibold">Sincronizando com a nuvem...</td></tr>';
+            
+            const { data: estoque, error } = await db
+                .from('estoque')
+                .select('*')
+                .order('id', { ascending: true });
+
+            if (error) {
+                console.error("Erro do Supabase:", error);
+                tabela.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-red-500">Erro de conexão. Lembre-se de criar as colunas preco_custo e preco_venda no Supabase!</td></tr>';
+                return;
+            }
+
+            estoqueGlobal = estoque; 
+            aplicarFiltro(); 
+        }
+
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             const btnSubmit = form.querySelector('button[type="submit"]');
@@ -126,7 +181,10 @@
                 nome: document.getElementById('nome').value,
                 categoria: document.getElementById('categoria').value,
                 volume: document.getElementById('volume').value,
-                quantidade: parseInt(document.getElementById('quantidade').value)
+                quantidade: parseInt(document.getElementById('quantidade').value),
+                // Lendo os novos campos. parseFloat transforma o texto em número decimal
+                preco_custo: parseFloat(document.getElementById('precoCusto').value),
+                preco_venda: parseFloat(document.getElementById('precoVenda').value)
             };
 
             const { error } = await db.from('estoque').insert([novoProduto]);
@@ -135,40 +193,29 @@
                 form.reset();
                 await carregarEstoque();
             } else {
-                alert("Erro ao salvar. Verifique se as colunas no Supabase estão corretas.");
+                alert("Erro ao salvar. Tem certeza que criou as colunas 'preco_custo' e 'preco_venda' com o tipo 'float8' no Supabase?");
                 console.error(error);
             }
 
-            btnSubmit.innerText = "Adicionar";
+            btnSubmit.innerText = "Salvar";
             btnSubmit.disabled = false;
         });
 
-        // 4. Alterar a quantidade (Venda ou Reposição)
         async function alterarQuantidade(id, quantidadeAtual, valor) {
             const novaQuantidade = quantidadeAtual + valor;
             if (novaQuantidade >= 0) {
-                await db
-                    .from('estoque')
-                    .update({ quantidade: novaQuantidade })
-                    .eq('id', id);
-                    
+                await db.from('estoque').update({ quantidade: novaQuantidade }).eq('id', id);
                 carregarEstoque(); 
             }
         }
 
-        // 5. Excluir uma bebida permanentemente
         async function deletarProduto(id) {
             if (confirm("Tem certeza que deseja remover esta bebida do sistema?")) {
-                await db
-                    .from('estoque')
-                    .delete()
-                    .eq('id', id);
-                    
+                await db.from('estoque').delete().eq('id', id);
                 carregarEstoque(); 
             }
         }
 
-        // Dá o pontapé inicial carregando a tabela
         carregarEstoque();
     </script>
 </body>
