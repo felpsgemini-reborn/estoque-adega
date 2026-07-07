@@ -13,6 +13,7 @@
 </head>
 <body class="bg-slate-100 font-sans">
 
+    <!-- ================= TELA DE LOGIN ================= -->
     <div id="telaLogin" class="min-h-screen flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
             <div class="text-center mb-8">
@@ -35,6 +36,7 @@
         </div>
     </div>
 
+    <!-- ================= TELA DO APLICATIVO ================= -->
     <div id="telaApp" class="max-w-7xl mx-auto space-y-6 p-4 md:p-8 hidden">
         
         <div class="bg-white p-6 rounded-lg shadow-lg">
@@ -48,6 +50,7 @@
                 </div>
             </div>
 
+            <!-- Dashboard Financeiro -->
             <div id="dashboardFinanceiro" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 hidden">
                 <div class="bg-slate-50 p-4 rounded-md border border-slate-200 shadow-sm flex items-center justify-between border-l-4 border-blue-500">
                     <div>
@@ -64,12 +67,24 @@
                     <div class="text-green-500 text-4xl">💰</div>
                 </div>
             </div>
+
+            <!-- Banner de Alerta de Estoque Baixo (Inicia Oculto) -->
+            <div id="alertaEstoqueBaixo" class="hidden mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-md shadow-sm">
+                <div class="flex items-center">
+                    <span class="text-3xl mr-4">⚠️</span>
+                    <div>
+                        <h3 class="text-red-800 font-bold text-lg">Atenção ao Estoque!</h3>
+                        <p class="text-red-600 text-sm font-semibold" id="textoAlertaEstoque">Há produtos precisando de reposição.</p>
+                    </div>
+                </div>
+            </div>
             
+            <!-- Formulário de Cadastro -->
             <div class="bg-slate-50 p-5 rounded-md border border-slate-200 mb-6 shadow-sm">
                 <h2 class="text-lg font-semibold text-slate-700 mb-4">Adicionar Item</h2>
                 <form id="formProduto" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-3 items-end">
                     
-                    <div class="lg:col-span-3">
+                    <div class="lg:col-span-2">
                         <label class="block text-xs text-slate-500 font-semibold mb-1">Nome da Bebida</label>
                         <input type="text" id="nome" placeholder="Ex: Heineken" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
                     </div>
@@ -91,9 +106,16 @@
                         <label class="block text-xs text-slate-500 font-semibold mb-1">Volume</label>
                         <input type="text" id="volume" placeholder="Ex: 1L" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
                     </div>
+
+                    <!-- Novo Campo: Estoque Mínimo -->
+                    <div id="blocoEstoqueMin" class="lg:col-span-1">
+                        <label class="block text-xs text-red-500 font-semibold mb-1" title="O sistema vai alertar quando chegar nesse número">Qtd. Mínima</label>
+                        <input type="number" id="estoqueMinimo" placeholder="Alerta" class="w-full border border-red-200 p-2 rounded focus:outline-none focus:border-red-500 bg-red-50">
+                    </div>
                     
+                    <!-- Blocos de Quantidade Dinâmicos -->
                     <div id="blocoQtdNormal" class="lg:col-span-1">
-                        <label class="block text-xs text-slate-500 font-semibold mb-1">Estoque</label>
+                        <label class="block text-xs text-slate-500 font-semibold mb-1">Qtd Atual</label>
                         <input type="number" id="quantidade" placeholder="Qtd" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
                     </div>
                     <div id="blocoQtdCerveja" class="lg:col-span-2 hidden grid-cols-2 gap-2">
@@ -117,6 +139,7 @@
                         <input type="number" step="0.01" id="precoVenda" placeholder="Unid." class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500 bg-white">
                     </div>
                     
+                    <!-- Este bloco some para Copões -->
                     <div id="blocoAtacado" class="lg:col-span-2">
                         <label class="block text-xs text-slate-500 font-semibold mb-1" id="labelPrecoAtacado">Venda Especial (R$)</label>
                         <input type="number" step="0.01" id="precoAtacado" placeholder="Combo/Fardo" class="w-full border border-blue-200 p-2 rounded focus:outline-none focus:border-blue-500 bg-blue-50 text-blue-900">
@@ -128,10 +151,12 @@
                 </form>
             </div>
 
+            <!-- Barra de Pesquisa -->
             <div class="mb-4">
                 <input type="text" id="campoPesquisa" placeholder="🔍 Buscar por nome ou categoria..." class="w-full border border-slate-300 p-3 rounded-md focus:outline-none focus:border-blue-500 shadow-sm text-slate-700">
             </div>
 
+            <!-- Tabela de Estoque -->
             <div class="overflow-x-auto pb-4">
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
@@ -152,6 +177,7 @@
             </div>
         </div>
 
+        <!-- Bloco Histórico de Vendas -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
             <h2 class="text-xl font-bold text-slate-800 mb-4">📜 Últimas Vendas (Hoje)</h2>
             <div class="overflow-x-auto">
@@ -171,6 +197,7 @@
         </div>
     </div>
 
+    <!-- ================= SCRIPTS ================= -->
     <script>
         const supabaseUrl = 'https://nkbvqzkshyoxerdfdwlg.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYnZxemtzaHlveGVyZGZkd2xnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMzEzMTksImV4cCI6MjA5ODgwNzMxOX0.EEX1lNaHxV2P7On2VrY68hpR2fyxRgjtr7mMKnpYPO0';
@@ -185,12 +212,15 @@
         let modoGestor = false;
         const btnVisao = document.getElementById('btnVisao');
         const dashboardFinanceiro = document.getElementById('dashboardFinanceiro');
+        const bannerAlerta = document.getElementById('alertaEstoqueBaixo');
+        const textoAlerta = document.getElementById('textoAlertaEstoque');
 
         // ================= LÓGICA DO FORMULÁRIO DINÂMICO =================
         const selectCategoria = document.getElementById('categoria');
         const blocoQtdNormal = document.getElementById('blocoQtdNormal');
         const blocoQtdCerveja = document.getElementById('blocoQtdCerveja');
         const blocoAtacado = document.getElementById('blocoAtacado');
+        const blocoEstoqueMin = document.getElementById('blocoEstoqueMin'); // Novo bloco
         const labelPrecoVenda = document.getElementById('labelPrecoVenda');
         const labelPrecoAtacado = document.getElementById('labelPrecoAtacado');
         const inputPrecoVenda = document.getElementById('precoVenda');
@@ -200,11 +230,11 @@
         function ajustarFormulario() {
             const cat = selectCategoria.value;
 
-            // 1. Reseta os blocos para o estado padrão
             blocoQtdNormal.classList.remove('hidden');
             blocoQtdCerveja.classList.add('hidden');
             blocoQtdCerveja.classList.remove('grid');
             blocoAtacado.classList.remove('hidden');
+            blocoEstoqueMin.classList.remove('hidden');
 
             if (cat === 'Cerveja') {
                 blocoQtdNormal.classList.add('hidden');
@@ -215,14 +245,13 @@
                 inputPrecoAtacado.placeholder = "Fardo";
             } 
             else if (cat === 'Dose/Copão') {
-                // Esconde a quantidade e o preço especial (fardo/combo)
                 blocoQtdNormal.classList.add('hidden');
                 blocoAtacado.classList.add('hidden');
+                blocoEstoqueMin.classList.add('hidden'); // Copão não tem mínimo
                 labelPrecoVenda.innerText = 'Venda Copão (R$)';
                 inputPrecoVenda.placeholder = "Preço";
             } 
             else {
-                // Outros Destilados e Vinhos
                 labelPrecoVenda.innerText = 'Venda Unid. (R$)';
                 labelPrecoAtacado.innerText = 'Venda Combo (R$)';
                 inputPrecoAtacado.placeholder = "Combo (Op.)";
@@ -230,7 +259,6 @@
             }
         }
 
-        // Executa a função ao trocar a categoria e ao carregar a página
         selectCategoria.addEventListener('change', ajustarFormulario);
         ajustarFormulario(); 
         // =================================================================
@@ -288,8 +316,6 @@
 
         checarSessao();
 
-        // ==== LÓGICA DO ESTOQUE E HISTÓRICO ==== //
-
         const formProduto = document.getElementById('formProduto');
         const tabela = document.getElementById('tabelaEstoque');
         const tabelaHistorico = document.getElementById('tabelaHistorico');
@@ -298,7 +324,6 @@
         let estoqueGlobal = [];
 
         const formatarMoeda = (valor) => valor > 0 ? Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-';
-        // Simplifiquei a formatação da data para caber melhor na tela do celular
         const formatarData = (dataIso) => {
             const d = new Date(dataIso);
             return `${d.toLocaleDateString('pt-BR').slice(0,5)} ${d.toLocaleTimeString('pt-BR').slice(0,5)}`;
@@ -326,10 +351,13 @@
 
             if (dados.length === 0) { tabela.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-500">Nenhum item cadastrado.</td></tr>`; return; }
 
+            let produtosEmFalta = 0; // Contador de alertas
+
             dados.forEach((produto) => {
                 const custo = parseFloat(produto.preco_custo) || 0;
                 const vendaUnid = parseFloat(produto.preco_venda) || 0;
                 const vendaAtacado = parseFloat(produto.preco_atacado) || 0;
+                const estMinimo = parseInt(produto.estoque_minimo) || 0; // Pega o limite definido
                 const lucro = vendaUnid - custo;
                 
                 const corLucro = lucro >= 0 ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
@@ -341,19 +369,24 @@
 
                 if (produto.quantidade === null) {
                     displayEstoque = '<span class="text-2xl text-blue-500">∞</span> <br><span class="text-[10px] uppercase text-slate-400 font-bold">Livre</span>';
-                } else if (produto.tamanho_fardo > 0) {
-                    const fardos = Math.floor(produto.quantidade / produto.tamanho_fardo);
-                    const sobra = produto.quantidade % produto.tamanho_fardo;
-                    displayEstoque = `<div class="text-sm"><b>${fardos}</b> Fd<br><span class="text-slate-500 font-normal text-xs">+ ${sobra} Un</span></div>`;
-                    if (produto.quantidade < produto.tamanho_fardo) alertaEstoque = 'text-red-600 font-bold';
                 } else {
-                    displayEstoque = `${produto.quantidade}`;
-                    if (produto.quantidade < 5) alertaEstoque = 'text-red-600 font-bold text-lg';
+                    // Verifica se bateu a regra do mínimo
+                    if (produto.quantidade <= estMinimo) {
+                        alertaEstoque = 'text-red-600 font-bold text-lg';
+                        produtosEmFalta++; // Aumenta o contador para mostrar o banner lá em cima
+                    }
+
+                    if (produto.tamanho_fardo > 0) {
+                        const fardos = Math.floor(produto.quantidade / produto.tamanho_fardo);
+                        const sobra = produto.quantidade % produto.tamanho_fardo;
+                        displayEstoque = `<div class="text-sm"><b>${fardos}</b> Fd<br><span class="text-slate-500 font-normal text-xs">+ ${sobra} Un</span></div>`;
+                    } else {
+                        displayEstoque = `${produto.quantidade}`;
+                    }
                 }
 
                 let botoesVenda = '';
                 if (vendaUnid > 0 || custo === 0) {
-                    // Texto do botão muda dependendo se é copão ou item normal
                     let lblVenda = produto.categoria === 'Dose/Copão' ? '🛒 Vender' : '🛒 Unid';
                     botoesVenda += `<button onclick="registrarVenda(${produto.id}, '${nomeEscapado} (Unid)', ${vendaUnid}, ${lucro}, ${produto.quantidade === null ? 'null' : produto.quantidade}, 1)" class="bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600 text-sm font-bold shadow mr-1">${lblVenda}</button>`;
                 }
@@ -386,6 +419,14 @@
                 `;
                 tabela.appendChild(tr);
             });
+
+            // Gerencia a exibição do Banner de Aviso Global
+            if (produtosEmFalta > 0) {
+                bannerAlerta.classList.remove('hidden');
+                textoAlerta.innerText = `Há ${produtosEmFalta} produto(s) abaixo da quantidade mínima. Considere acionar o fornecedor.`;
+            } else {
+                bannerAlerta.classList.add('hidden');
+            }
         }
 
         function aplicarFiltro() {
@@ -437,6 +478,7 @@
             const pCusto = parseFloat(document.getElementById('precoCusto').value) || null;
             const pVenda = parseFloat(document.getElementById('precoVenda').value) || null;
             const pAtacado = parseFloat(document.getElementById('precoAtacado').value) || null;
+            const eMin = parseInt(document.getElementById('estoqueMinimo').value) || 0; // Resgata o limite
             
             const categoriaSel = document.getElementById('categoria').value;
             let qtdFinal = null;
@@ -459,16 +501,17 @@
                 volume: document.getElementById('volume').value, 
                 quantidade: qtdFinal,
                 tamanho_fardo: tamFardo,
+                estoque_minimo: categoriaSel === 'Dose/Copão' ? null : eMin, // Registra o limite
                 preco_custo: pCusto, 
                 preco_venda: pVenda,
-                preco_atacado: categoriaSel === 'Dose/Copão' ? null : pAtacado // Garante que não salva atacado pro Copão
+                preco_atacado: categoriaSel === 'Dose/Copão' ? null : pAtacado 
             };
 
             const { error } = await db.from('estoque').insert([novoProduto]);
-            if(error) { alert("Erro ao salvar no banco."); console.error(error); }
+            if(error) { alert("Erro ao salvar no banco. Lembre-se da coluna 'estoque_minimo'."); console.error(error); }
             
             formProduto.reset(); 
-            ajustarFormulario(); // Reseta os campos baseados na categoria que ficou (Copão por padrão)
+            ajustarFormulario(); 
 
             await carregarEstoque();
             btnSubmit.innerText = "Salvar"; btnSubmit.disabled = false;
