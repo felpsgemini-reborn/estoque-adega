@@ -42,7 +42,7 @@
                 <h1 class="text-2xl font-bold text-slate-800">🍷 Gestão de Adega</h1>
                 <div class="flex items-center space-x-3">
                     <button id="btnVisao" class="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 px-3 py-1 rounded font-semibold transition text-sm flex items-center shadow-sm">
-                        👁️ Alternar para Modo Gestor
+                        👁️ Modo Gestor
                     </button>
                     <button id="btnSair" class="bg-slate-200 text-slate-700 hover:bg-red-500 hover:text-white px-3 py-1 rounded font-semibold transition text-sm">Sair</button>
                 </div>
@@ -51,14 +51,14 @@
             <div id="dashboardFinanceiro" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 hidden">
                 <div class="bg-slate-50 p-4 rounded-md border border-slate-200 shadow-sm flex items-center justify-between border-l-4 border-blue-500">
                     <div>
-                        <p class="text-sm text-slate-500 font-semibold uppercase">Capital Investido (Custo)</p>
+                        <p class="text-sm text-slate-500 font-semibold uppercase">Capital Investido</p>
                         <p class="text-2xl font-bold text-slate-800" id="totalCusto">R$ 0,00</p>
                     </div>
                     <div class="text-blue-500 text-4xl">📦</div>
                 </div>
                 <div class="bg-slate-50 p-4 rounded-md border border-slate-200 shadow-sm flex items-center justify-between border-l-4 border-green-500">
                     <div>
-                        <p class="text-sm text-slate-500 font-semibold uppercase">Expectativa de Venda Base</p>
+                        <p class="text-sm text-slate-500 font-semibold uppercase">Expectativa Venda Base</p>
                         <p class="text-2xl font-bold text-slate-800" id="totalVenda">R$ 0,00</p>
                     </div>
                     <div class="text-green-500 text-4xl">💰</div>
@@ -66,11 +66,16 @@
             </div>
             
             <div class="bg-slate-50 p-5 rounded-md border border-slate-200 mb-6 shadow-sm">
-                <h2 class="text-lg font-semibold text-slate-700 mb-4">Adicionar Produto / Bebida</h2>
-                <form id="formProduto" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-10 gap-3">
-                    <div class="lg:col-span-2"><input type="text" id="nome" placeholder="Nome (ex: Heineken / Copão)" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500"></div>
+                <h2 class="text-lg font-semibold text-slate-700 mb-4">Adicionar Item</h2>
+                <form id="formProduto" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-3 items-end">
                     
-                    <div class="lg:col-span-1">
+                    <div class="lg:col-span-3">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1">Nome da Bebida</label>
+                        <input type="text" id="nome" placeholder="Ex: Heineken" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                    </div>
+                    
+                    <div class="lg:col-span-2">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1">Categoria</label>
                         <select id="categoria" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
                             <option value="Dose/Copão">Dose/Copão</option>
                             <option value="Cerveja">Cerveja</option>
@@ -82,26 +87,49 @@
                         </select>
                     </div>
                     
-                    <div class="lg:col-span-1"><input type="text" id="volume" placeholder="Vol (ex: 350ml)" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500"></div>
+                    <div class="lg:col-span-1">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1">Volume</label>
+                        <input type="text" id="volume" placeholder="Ex: 1L" required class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                    </div>
                     
-                    <div id="blocoQtdNormal" class="lg:col-span-2">
-                        <input type="number" id="quantidade" placeholder="Qtd (Opcional p/ Copão)" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                    <div id="blocoQtdNormal" class="lg:col-span-1">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1">Estoque</label>
+                        <input type="number" id="quantidade" placeholder="Qtd" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500">
                     </div>
                     <div id="blocoQtdCerveja" class="lg:col-span-2 hidden grid-cols-2 gap-2">
-                        <input type="number" id="qtdFardos" placeholder="Nº Fardos" class="w-full border border-orange-300 p-2 rounded focus:outline-none focus:border-orange-500 bg-orange-50">
-                        <input type="number" id="tamFardo" placeholder="Latas/Fardo" class="w-full border border-orange-300 p-2 rounded focus:outline-none focus:border-orange-500 bg-orange-50">
+                        <div>
+                            <label class="block text-xs text-slate-500 font-semibold mb-1">Fardos</label>
+                            <input type="number" id="qtdFardos" placeholder="Qtd" class="w-full border border-orange-300 p-2 rounded focus:outline-none focus:border-orange-500 bg-orange-50">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 font-semibold mb-1">Latas/Fardo</label>
+                            <input type="number" id="tamFardo" placeholder="Unid" class="w-full border border-orange-300 p-2 rounded focus:outline-none focus:border-orange-500 bg-orange-50">
+                        </div>
                     </div>
                     
-                    <div class="lg:col-span-1"><input type="number" step="0.01" id="precoCusto" placeholder="Custo (Op.)" class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500 bg-white"></div>
-                    <div class="lg:col-span-1"><input type="number" step="0.01" id="precoVenda" placeholder="Venda Unid." class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500 bg-white"></div>
-                    <div class="lg:col-span-1"><input type="number" step="0.01" id="precoAtacado" placeholder="Venda Fardo" class="w-full border border-blue-200 p-2 rounded focus:outline-none focus:border-blue-500 bg-blue-50" title="Preço do Combo ou Fardo"></div>
+                    <div class="lg:col-span-1">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1">Custo (R$)</label>
+                        <input type="number" step="0.01" id="precoCusto" placeholder="Op." class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500 bg-white">
+                    </div>
                     
-                    <div class="lg:col-span-1"><button type="submit" class="w-full bg-blue-600 text-white font-semibold p-2 rounded hover:bg-blue-700 transition">Salvar</button></div>
+                    <div class="lg:col-span-1">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1" id="labelPrecoVenda">Venda (R$)</label>
+                        <input type="number" step="0.01" id="precoVenda" placeholder="Unid." class="w-full border border-slate-300 p-2 rounded focus:outline-none focus:border-blue-500 bg-white">
+                    </div>
+                    
+                    <div id="blocoAtacado" class="lg:col-span-2">
+                        <label class="block text-xs text-slate-500 font-semibold mb-1" id="labelPrecoAtacado">Venda Especial (R$)</label>
+                        <input type="number" step="0.01" id="precoAtacado" placeholder="Combo/Fardo" class="w-full border border-blue-200 p-2 rounded focus:outline-none focus:border-blue-500 bg-blue-50 text-blue-900">
+                    </div>
+                    
+                    <div class="lg:col-span-1">
+                        <button type="submit" class="w-full bg-blue-600 text-white font-semibold p-2 rounded hover:bg-blue-700 transition h-10">Salvar</button>
+                    </div>
                 </form>
             </div>
 
             <div class="mb-4">
-                <input type="text" id="campoPesquisa" placeholder="🔍 Buscar bebida por nome ou categoria..." class="w-full border border-slate-300 p-3 rounded-md focus:outline-none focus:border-blue-500 shadow-sm text-slate-700">
+                <input type="text" id="campoPesquisa" placeholder="🔍 Buscar por nome ou categoria..." class="w-full border border-slate-300 p-3 rounded-md focus:outline-none focus:border-blue-500 shadow-sm text-slate-700">
             </div>
 
             <div class="overflow-x-auto pb-4">
@@ -109,14 +137,14 @@
                     <thead>
                         <tr class="bg-slate-800 text-white">
                             <th class="p-3 rounded-tl-md">Item</th>
-                            <th class="p-3">Categoria</th>
-                            <th class="p-3">Vol</th>
-                            <th class="p-3 text-center col-financeira hidden">Custo un.</th>
+                            <th class="p-3">Cat.</th>
+                            <th class="p-3">Vol.</th>
+                            <th class="p-3 text-center col-financeira hidden">Custo</th>
                             <th class="p-3 text-center">Venda Unid.</th>
-                            <th class="p-3 text-center">Venda Fardo/Combo</th>
+                            <th class="p-3 text-center">Combo/Fardo</th>
                             <th class="p-3 text-center col-financeira hidden">Lucro un.</th>
                             <th class="p-3 text-center">Estoque</th>
-                            <th class="p-3 text-center rounded-tr-md">Operações de Caixa</th>
+                            <th class="p-3 text-center rounded-tr-md">Caixa Rápido</th>
                         </tr>
                     </thead>
                     <tbody id="tabelaEstoque" class="text-slate-700"></tbody>
@@ -125,16 +153,16 @@
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-xl font-bold text-slate-800 mb-4">📜 Últimas Vendas (Cupom Fictício)</h2>
+            <h2 class="text-xl font-bold text-slate-800 mb-4">📜 Últimas Vendas (Hoje)</h2>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-100 text-slate-700 border-b border-slate-300">
-                            <th class="p-3">Data e Hora</th>
-                            <th class="p-3">Item Vendido</th>
-                            <th class="p-3 text-center">Tipo de Venda</th>
+                            <th class="p-3">Data/Hora</th>
+                            <th class="p-3">Item</th>
+                            <th class="p-3 text-center">Formato</th>
                             <th class="p-3 text-center">Valor Cobrado</th>
-                            <th class="p-3 text-center col-financeira hidden">Lucro Registrado</th>
+                            <th class="p-3 text-center col-financeira hidden">Lucro</th>
                         </tr>
                     </thead>
                     <tbody id="tabelaHistorico" class="text-slate-600"></tbody>
@@ -158,33 +186,65 @@
         const btnVisao = document.getElementById('btnVisao');
         const dashboardFinanceiro = document.getElementById('dashboardFinanceiro');
 
-        // Lógica de alternar blocos de Quantidade (Cerveja x Normal)
+        // ================= LÓGICA DO FORMULÁRIO DINÂMICO =================
         const selectCategoria = document.getElementById('categoria');
         const blocoQtdNormal = document.getElementById('blocoQtdNormal');
         const blocoQtdCerveja = document.getElementById('blocoQtdCerveja');
+        const blocoAtacado = document.getElementById('blocoAtacado');
+        const labelPrecoVenda = document.getElementById('labelPrecoVenda');
+        const labelPrecoAtacado = document.getElementById('labelPrecoAtacado');
+        const inputPrecoVenda = document.getElementById('precoVenda');
+        const inputPrecoAtacado = document.getElementById('precoAtacado');
+        const inputQuantidade = document.getElementById('quantidade');
 
-        selectCategoria.addEventListener('change', (e) => {
-            if(e.target.value === 'Cerveja') {
+        function ajustarFormulario() {
+            const cat = selectCategoria.value;
+
+            // 1. Reseta os blocos para o estado padrão
+            blocoQtdNormal.classList.remove('hidden');
+            blocoQtdCerveja.classList.add('hidden');
+            blocoQtdCerveja.classList.remove('grid');
+            blocoAtacado.classList.remove('hidden');
+
+            if (cat === 'Cerveja') {
                 blocoQtdNormal.classList.add('hidden');
                 blocoQtdCerveja.classList.remove('hidden');
                 blocoQtdCerveja.classList.add('grid');
-            } else {
-                blocoQtdNormal.classList.remove('hidden');
-                blocoQtdCerveja.classList.add('hidden');
-                blocoQtdCerveja.classList.remove('grid');
+                labelPrecoVenda.innerText = 'Venda Lata (R$)';
+                labelPrecoAtacado.innerText = 'Venda Fardo (R$)';
+                inputPrecoAtacado.placeholder = "Fardo";
+            } 
+            else if (cat === 'Dose/Copão') {
+                // Esconde a quantidade e o preço especial (fardo/combo)
+                blocoQtdNormal.classList.add('hidden');
+                blocoAtacado.classList.add('hidden');
+                labelPrecoVenda.innerText = 'Venda Copão (R$)';
+                inputPrecoVenda.placeholder = "Preço";
+            } 
+            else {
+                // Outros Destilados e Vinhos
+                labelPrecoVenda.innerText = 'Venda Unid. (R$)';
+                labelPrecoAtacado.innerText = 'Venda Combo (R$)';
+                inputPrecoAtacado.placeholder = "Combo (Op.)";
+                inputQuantidade.placeholder = "Qtd";
             }
-        });
+        }
+
+        // Executa a função ao trocar a categoria e ao carregar a página
+        selectCategoria.addEventListener('change', ajustarFormulario);
+        ajustarFormulario(); 
+        // =================================================================
 
         btnVisao.addEventListener('click', () => {
             modoGestor = !modoGestor;
             if(modoGestor) {
                 dashboardFinanceiro.classList.remove('hidden');
-                btnVisao.innerText = '👁️ Alternar para Modo Caixa';
+                btnVisao.innerText = '👁️ Modo Caixa';
                 btnVisao.classList.replace('bg-indigo-100', 'bg-emerald-100');
                 btnVisao.classList.replace('text-indigo-800', 'text-emerald-800');
             } else {
                 dashboardFinanceiro.classList.add('hidden');
-                btnVisao.innerText = '👁️ Alternar para Modo Gestor';
+                btnVisao.innerText = '👁️ Modo Gestor';
                 btnVisao.classList.replace('bg-emerald-100', 'bg-indigo-100');
                 btnVisao.classList.replace('text-emerald-800', 'text-indigo-800');
             }
@@ -209,7 +269,7 @@
             if (error) {
                 msgErroLogin.innerText = "Usuário ou senha incorretos.";
                 msgErroLogin.classList.remove('hidden');
-                btnEntrar.innerText = "Entrar no Sistema";
+                btnEntrar.innerText = "Entrar";
             } else { mostrarAplicativo(); }
         });
 
@@ -238,7 +298,11 @@
         let estoqueGlobal = [];
 
         const formatarMoeda = (valor) => valor > 0 ? Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-';
-        const formatarData = (dataIso) => new Date(dataIso).toLocaleString('pt-BR');
+        // Simplifiquei a formatação da data para caber melhor na tela do celular
+        const formatarData = (dataIso) => {
+            const d = new Date(dataIso);
+            return `${d.toLocaleDateString('pt-BR').slice(0,5)} ${d.toLocaleTimeString('pt-BR').slice(0,5)}`;
+        };
 
         function atualizarDashboard(dados) {
             let totalCusto = 0; let totalVenda = 0;
@@ -272,31 +336,32 @@
                 const visibilidadeFinanceira = modoGestor ? '' : 'hidden';
                 const nomeEscapado = produto.nome.replace(/'/g, "\\'");
                 
-                // Lógica de Exibição de Estoque (Fardos e Copões)
                 let displayEstoque = '';
                 let alertaEstoque = 'text-slate-800 font-bold';
 
                 if (produto.quantidade === null) {
-                    displayEstoque = '<span class="text-2xl text-blue-500">∞</span> <br><span class="text-xs text-slate-400">Livre</span>';
+                    displayEstoque = '<span class="text-2xl text-blue-500">∞</span> <br><span class="text-[10px] uppercase text-slate-400 font-bold">Livre</span>';
                 } else if (produto.tamanho_fardo > 0) {
                     const fardos = Math.floor(produto.quantidade / produto.tamanho_fardo);
                     const sobra = produto.quantidade % produto.tamanho_fardo;
-                    displayEstoque = `<div class="text-sm"><b>${fardos}</b> Fardos<br><span class="text-slate-500 font-normal">+ ${sobra} Unid.</span></div>`;
+                    displayEstoque = `<div class="text-sm"><b>${fardos}</b> Fd<br><span class="text-slate-500 font-normal text-xs">+ ${sobra} Un</span></div>`;
                     if (produto.quantidade < produto.tamanho_fardo) alertaEstoque = 'text-red-600 font-bold';
                 } else {
                     displayEstoque = `${produto.quantidade}`;
                     if (produto.quantidade < 5) alertaEstoque = 'text-red-600 font-bold text-lg';
                 }
 
-                // Lógica dos Botões de Venda
                 let botoesVenda = '';
                 if (vendaUnid > 0 || custo === 0) {
-                    botoesVenda += `<button onclick="registrarVenda(${produto.id}, '${nomeEscapado} (Unid)', ${vendaUnid}, ${lucro}, ${produto.quantidade === null ? 'null' : produto.quantidade}, 1)" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm font-bold shadow mr-1">🛒 Unid</button>`;
+                    // Texto do botão muda dependendo se é copão ou item normal
+                    let lblVenda = produto.categoria === 'Dose/Copão' ? '🛒 Vender' : '🛒 Unid';
+                    botoesVenda += `<button onclick="registrarVenda(${produto.id}, '${nomeEscapado} (Unid)', ${vendaUnid}, ${lucro}, ${produto.quantidade === null ? 'null' : produto.quantidade}, 1)" class="bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600 text-sm font-bold shadow mr-1">${lblVenda}</button>`;
                 }
                 if (vendaAtacado > 0) {
                     const lucroAtacado = vendaAtacado - (custo * (produto.tamanho_fardo || 1));
-                    const abateFardo = produto.tamanho_fardo || 1; // Desconta 12 se for cerveja, ou 1 se for combo normal
-                    botoesVenda += `<button onclick="registrarVenda(${produto.id}, '${nomeEscapado} (Fardo/Combo)', ${vendaAtacado}, ${lucroAtacado}, ${produto.quantidade === null ? 'null' : produto.quantidade}, ${abateFardo})" class="bg-indigo-500 text-white px-2 py-1 rounded hover:bg-indigo-600 text-sm font-bold shadow mr-1">🛒 Fardo</button>`;
+                    const abateFardo = produto.tamanho_fardo || 1; 
+                    let lblAtacado = produto.categoria === 'Cerveja' ? '🛒 Fardo' : '🛒 Combo';
+                    botoesVenda += `<button onclick="registrarVenda(${produto.id}, '${nomeEscapado} (${lblAtacado.replace('🛒 ', '')})', ${vendaAtacado}, ${lucroAtacado}, ${produto.quantidade === null ? 'null' : produto.quantidade}, ${abateFardo})" class="bg-indigo-500 text-white px-3 py-1.5 rounded hover:bg-indigo-600 text-sm font-bold shadow mr-1">${lblAtacado}</button>`;
                 }
 
                 const tr = document.createElement('tr');
@@ -314,9 +379,9 @@
                     <td class="p-3 text-center ${alertaEstoque}">${displayEstoque}</td>
                     <td class="p-3 text-center whitespace-nowrap">
                         ${botoesVenda}
-                        <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade === null ? 'null' : produto.quantidade}, 1)" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 text-sm font-bold shadow ml-2">+</button>
-                        <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade === null ? 'null' : produto.quantidade}, -1)" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-sm font-bold shadow mr-2">-</button>
-                        <button onclick="deletarProduto(${produto.id})" class="bg-red-400 text-white px-2 py-1 rounded hover:bg-red-500 text-sm font-bold shadow">🗑️</button>
+                        <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade === null ? 'null' : produto.quantidade}, 1)" class="bg-green-500 text-white px-2 py-1.5 rounded hover:bg-green-600 text-sm font-bold shadow ml-1">+</button>
+                        <button onclick="alterarQuantidade(${produto.id}, ${produto.quantidade === null ? 'null' : produto.quantidade}, -1)" class="bg-yellow-500 text-white px-2 py-1.5 rounded hover:bg-yellow-600 text-sm font-bold shadow mr-2">-</button>
+                        <button onclick="deletarProduto(${produto.id})" class="bg-red-400 text-white px-2 py-1.5 rounded hover:bg-red-500 text-sm font-bold shadow">🗑️</button>
                     </td>
                 `;
                 tabela.appendChild(tr);
@@ -349,12 +414,12 @@
 
             vendas.forEach(venda => {
                 const corLucro = venda.lucro_obtido >= 0 ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold';
-                const tipoVenda = venda.nome_bebida.includes('Fardo') ? '<span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs font-bold">Atacado</span>' : '<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-bold">Varejo</span>';
+                const tipoVenda = venda.nome_bebida.includes('Fardo') || venda.nome_bebida.includes('Combo') ? '<span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-[10px] uppercase font-bold">Atacado</span>' : '<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-[10px] uppercase font-bold">Varejo</span>';
                 
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-slate-100 hover:bg-slate-50";
                 tr.innerHTML = `
-                    <td class="p-3 text-sm">${formatarData(venda.created_at)}</td>
+                    <td class="p-3 text-xs text-slate-500 font-semibold">${formatarData(venda.created_at)}</td>
                     <td class="p-3 font-medium text-slate-800">${venda.nome_bebida}</td>
                     <td class="p-3 text-center">${tipoVenda}</td>
                     <td class="p-3 text-center text-slate-800 font-bold">${formatarMoeda(venda.valor_venda)}</td>
@@ -377,14 +442,13 @@
             let qtdFinal = null;
             let tamFardo = null;
 
-            // Tratamento especial para Cervejas (Fardos x Latas)
             if (categoriaSel === 'Cerveja') {
                 const fardos = parseInt(document.getElementById('qtdFardos').value) || 0;
                 tamFardo = parseInt(document.getElementById('tamFardo').value) || 0;
                 if (fardos > 0 && tamFardo > 0) {
-                    qtdFinal = fardos * tamFardo; // Salva o total de latas no banco
+                    qtdFinal = fardos * tamFardo;
                 }
-            } else {
+            } else if (categoriaSel !== 'Dose/Copão') {
                 const valQtd = document.getElementById('quantidade').value;
                 qtdFinal = valQtd === '' ? null : parseInt(valQtd);
             }
@@ -397,25 +461,20 @@
                 tamanho_fardo: tamFardo,
                 preco_custo: pCusto, 
                 preco_venda: pVenda,
-                preco_atacado: pAtacado
+                preco_atacado: categoriaSel === 'Dose/Copão' ? null : pAtacado // Garante que não salva atacado pro Copão
             };
 
             const { error } = await db.from('estoque').insert([novoProduto]);
-            if(error) { alert("Erro ao salvar. Lembre-se de criar a coluna 'tamanho_fardo' do tipo int4 no Supabase!"); console.error(error); }
+            if(error) { alert("Erro ao salvar no banco."); console.error(error); }
             
             formProduto.reset(); 
-            // Volta os blocos ao normal
-            blocoQtdNormal.classList.remove('hidden');
-            blocoQtdCerveja.classList.add('hidden');
-            blocoQtdCerveja.classList.remove('grid');
+            ajustarFormulario(); // Reseta os campos baseados na categoria que ficou (Copão por padrão)
 
             await carregarEstoque();
             btnSubmit.innerText = "Salvar"; btnSubmit.disabled = false;
         });
 
-        // O parâmetro 'abate' diz quantas unidades descontar (1 para lata, 12 para fardo, etc)
         async function registrarVenda(id, nomeBebida, valorVenda, lucroObtido, quantidadeAtual, abate) {
-            // Se for nulo (Copão livre), não desconta nada, apenas pula pro histórico
             if (quantidadeAtual !== null) {
                 if (quantidadeAtual < abate) { alert("Estoque insuficiente para essa venda!"); return; }
                 await db.from('estoque').update({ quantidade: quantidadeAtual - abate }).eq('id', id);
@@ -425,7 +484,6 @@
         }
 
         async function alterarQuantidade(id, quantidadeAtual, valor) {
-            // Se for infinito/livre, não faz nada
             if (quantidadeAtual !== null) {
                 if (quantidadeAtual + valor >= 0) { 
                     await db.from('estoque').update({ quantidade: quantidadeAtual + valor }).eq('id', id); 
